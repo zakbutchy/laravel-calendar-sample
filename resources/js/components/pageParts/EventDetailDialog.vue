@@ -1,6 +1,9 @@
 <template>
     <v-card class="pb-12">
         <v-card-actions class="d-flex justify-end pa-2">
+            <v-btn icon @click="editEvent">
+                <v-icon size="20px">mdi-pencil-outline</v-icon>
+            </v-btn>
             <v-btn icon @click="removeEvent">
                 <v-icon size="20px">mdi-trash-can-outline</v-icon>
             </v-btn>
@@ -39,9 +42,12 @@ export default {
         DialogSection,
     },
     methods: {
-        ...mapActions('events', ['setEvent', 'deleteEvent']),
+        ...mapActions('events', ['setEvent', 'deleteEvent', 'setEditMode']),
         closeDialog() {
             this.setEvent(null);
+        },
+        editEvent() {
+            this.setEditMode(true);
         },
         removeEvent() {
             this.$swal({
