@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -42,14 +43,21 @@ class EventController extends Controller
         }
     }
 
-
-    public function _saveEvent(Request $request, $event)
+    /**
+     * @param Request $request
+     * @param $event
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function _saveEvent(Request $request, $event): \Illuminate\Http\JsonResponse
     {
         $event->name = $request->input('name');
         $event->start = new Carbon($request->input('start')); // JSからのデータを日時形式に変換
         $event->end = new Carbon($request->input('end')); // JSからのデータを日時形式に変換
         $event->timed = $request->input('timed');
-        $event->calendar_id = $request->input('calendar_id');
+
+        // $event->calendar_id = $request->input('calendar_id');
+        $event->calendar_id = 1; // とりあえず登録されているカレンダーをデフォルトとして使用
+
         $event->description = $request->input('description');
         $event->color = $request->input('color');
 
