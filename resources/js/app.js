@@ -8,6 +8,9 @@ import Vuex from "vuex"; // vuexライブラリーをimport
 import Vuetify from "vuetify";
 import Home from "./components/pages/HomeComponent";
 import store from "./store/index"; // vuexストアを読み込む
+import VueSweetalert2 from 'vue-sweetalert2';
+
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 require("./bootstrap");
 
@@ -30,6 +33,12 @@ Vue.component(
 );
 Vue.use(Vuex); // Vuexを使用する事を宣言
 Vue.use(Vuetify);
+
+const swalOptions = {
+    confirmButtonColor: '#ff7674',
+    // cancelButtonColor: '#aaa',
+};
+Vue.use(VueSweetalert2, swalOptions);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

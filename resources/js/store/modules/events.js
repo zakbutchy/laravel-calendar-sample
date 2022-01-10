@@ -20,6 +20,8 @@ const mutations = {
     setEvents: (state, events) => (state.events = events),
     appendEvent: (state, event) => (state.events = [...state.events, event]),
     setEvent: (state, event) => (state.event = event),
+    removeEvent: (state, event) => (state.events = state.events.filter(e => e.id !== event.id)),
+    resetEvent: state => (state.event = null),
     setEditMode: (state, bool) => (state.isEditMode = bool),
 }
 
@@ -37,6 +39,12 @@ const actions = {
         const response = await axios.post('/api/events', event);
         // appendEventミューテーションに渡し、[...state.events, event]で元々のstate.events配列の末尾にeventデータを追加
         commit('appendEvent', response.data);
+    },
+    // イベント削除
+    async deleteEvent({ commit }, id) {
+        const response = await axios.delete(`/api/events/${id}`);
+        commit('removeEvent', response.data);
+        commit('resetEvent');
     },
     setEvent({ commit }, event) {
         commit('setEvent', event);

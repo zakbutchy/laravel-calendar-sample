@@ -1,12 +1,15 @@
 <template>
     <v-card class="pb-12">
         <v-card-actions class="d-flex justify-end pa-2">
-            <v-btn icon @click="closeDialog">
+            <v-btn icon @click="removeEvent">
+                <v-icon size="20px">mdi-trash-can-outline</v-icon>
+            </v-btn>
+            <v-btn icon @click="closeDialog" :color="event.color">
                 <v-icon size="20px">mdi-close</v-icon>
             </v-btn>
         </v-card-actions>
         <v-card-title>
-            <DialogSection icon="mdi-square" :color="event.color">
+            <DialogSection icon="mdi-square">
                 {{ event.name }}
             </DialogSection>
         </v-card-title>
@@ -36,9 +39,27 @@ export default {
         DialogSection,
     },
     methods: {
-        ...mapActions('events', ['setEvent']),
+        ...mapActions('events', ['setEvent', 'deleteEvent']),
         closeDialog() {
             this.setEvent(null);
+        },
+        removeEvent() {
+            this.$swal({
+                title: "Caution!",
+                html: `「${this.event.name}」を削除してもよろしいですか？`,
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Delete'
+            }).then(result => {
+                if (result.value) {
+                    this.deleteEvent(this.event.id);
+                    this.$swal(
+                        'OK!',
+                        'イベントを削除しました。',
+                        'success'
+                    )
+                }
+            });
         },
     }
 };
