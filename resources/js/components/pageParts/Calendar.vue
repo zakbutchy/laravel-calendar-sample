@@ -19,30 +19,45 @@
                 locale="ja-jp"
                 :day-format="(timestamp) => new Date(timestamp.date).getDate()"
                 :month-format="(timestamp) => (new Date(timestamp.date).getMonth() + 1)"
+                @click:event="showEvent"
             ></v-calendar>
         </v-sheet>
+
+        <v-dialog :value="event !== null" @click:outside="closeDialog" width="600">
+            <EventDetailDialog v-if="event !== null" />
+        </v-dialog>
     </div>
 </template>
 
 <script>
 import { format } from 'date-fns';
 import { mapGetters, mapActions } from 'vuex';
+import EventDetailDialog from './EventDetailDialog';
 
 export default {
     name: 'Calendar',
     data: () => ({
         value: format(new Date(), 'yyyy/MM/dd'), // 初期値を今日の月にする
     }),
+    components: {
+        EventDetailDialog,
+    },
     computed: {
-        ...mapGetters('events', ['events']),
+        ...mapGetters('events', ['events', 'event']), // storeのイベントgetterを使用する
         title () {
             return format(new Date(this.value), 'yyyy年 M月');
         },
     },
     methods: {
-        ...mapActions('events', ['fetchEvents']),
+        ...mapActions('events', ['fetchEvents', 'setEvent']), // storeのsetEventを利用するため追加
         setToday() {
             this.value = format(new Date(), 'yyyy/MM/dd')
+        },
+        showEvent({ event }) { // storeへクリックされたイベントを渡しstoreにセット
+            this.setEvent(event);
+        },
+        closeDialog() { // ダイアログを閉じる。storeのイベントへnullを渡す
+            this.setEvent(null);
         },
     }
 };
