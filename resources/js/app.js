@@ -4,8 +4,10 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 import Vue from "vue";
+import Vuex from "vuex"; // vuexライブラリーをimport
 import Vuetify from "vuetify";
 import Home from "./components/pages/HomeComponent";
+import store from "./store/index"; // vuexストアを読み込む
 
 require("./bootstrap");
 
@@ -26,6 +28,7 @@ Vue.component(
     "HomeComponent",
     require("./components/pages/HomeComponent.vue").default
 );
+Vue.use(Vuex); // Vuexを使用する事を宣言
 Vue.use(Vuetify);
 
 /**
@@ -37,6 +40,7 @@ Vue.use(Vuetify);
 const app = new Vue({
     el: "#app",
     vuetify: new Vuetify(),
+    store: store,
     components: {
         Home,
     },

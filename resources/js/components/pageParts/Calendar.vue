@@ -11,22 +11,18 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
     name: 'Calendar',
     data: () => ({
-        value: new Date('2022/01/10'), // 表示する月を指定 ※予めイベントデータを作成しておいて下さい。
-        events: [],
+        value: new Date('2022/01/01'), // 表示する月を指定
     }),
+    computed: {
+        ...mapGetters('events', ['events']),
+    },
     methods: {
-        fetchEvents() {
-            axios.get('/api/events')
-                .then(response => {
-                    this.events = response.data;
-                })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
+        ...mapActions('events', ['fetchEvents'])
     }
 };
 </script>
