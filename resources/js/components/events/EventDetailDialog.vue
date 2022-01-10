@@ -31,7 +31,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import DialogSection from './DialogSection';
+import DialogSection from '../pageParts/DialogSection';
 
 export default {
     name: 'EventDetailDialog',

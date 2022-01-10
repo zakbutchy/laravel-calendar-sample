@@ -37,11 +37,11 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import DialogSection from '../pageParts/DialogSection';
-import DateForm from './DateForm';
-import TimeForm from './TimeForm';
-import TextForm from './TextForm';
-import ColorForm from './ColorForm';
-import CheckBox from './CheckBox';
+import DateForm from '../form/DateForm';
+import TimeForm from '../form/TimeForm';
+import TextForm from '../form/TextForm';
+import ColorForm from '../form/ColorForm';
+import CheckBox from '../form/CheckBox';
 
 export default {
     name: 'EventFormDialog',
