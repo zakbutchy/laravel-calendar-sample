@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { isDateWithinInterval, compareDates } from '../../functions/datetime';
 import { serializeEvent } from '../../functions/serializers';
 
 // 一元管理するデータの状態
@@ -6,13 +7,23 @@ const state = {
     events: [],
     event: null,
     isEditMode: false,
+    clickedDate: null,
 };
 
 // stateを取得する（getterを使わないrenderもある）
 const getters = {
     events: state => state.events.map(event => serializeEvent(event)),
     event: state => serializeEvent(state.event),
+
+    // クリックした日付の予定を取得する
+    dayEvents: state =>
+        state.events
+            .map(event => serializeEvent(event))
+            .filter(event => isDateWithinInterval(state.clickedDate, event.startDate, event.endDate))
+            .sort(compareDates),
+
     isEditMode: state => state.isEditMode,
+    clickedDate: state => state.clickedDate,
 };
 
 // stateを更新する、更新は同期的に行う
@@ -24,6 +35,7 @@ const mutations = {
     resetEvent: state => (state.event = null),
     updateEvent: (state, event) => (state.events = state.events.map(e => (e.id === event.id ? event : e))),
     setEditMode: (state, bool) => (state.isEditMode = bool),
+    setClickedDate: (state, date) => (state.clickedDate = date),
 }
 
 // データの加工や、WebAPI呼び出しを非同期的に行う
@@ -57,6 +69,9 @@ const actions = {
     },
     setEditMode({ commit }, bool) {
         commit('setEditMode', bool)
+    },
+    setClickedDate({ commit }, date) {
+        commit('setClickedDate', date);
     },
 }
 

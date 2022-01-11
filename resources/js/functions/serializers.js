@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, set } from 'date-fns';
 
 // Vuexのストアで行っていたイベントをJSのオブジェクトにする処理を切り分ける
 // Vuexは状態の管理やAPIとの連携のみを行う様にしておく事で見通しが良くなる
@@ -7,8 +7,12 @@ export const serializeEvent = event => {
         return null;
     }
 
-    const start = new Date(event.start);
-    const end = new Date(event.end);
+    let start = new Date(event.start);
+    let end = new Date(event.end);
+    if (!event.timed) {
+        start = set(start, { hours: 0, minutes: 0, seconds: 0 });
+        end = set(end, { hours: 23, minutes: 59, seconds: 59 });
+    }
     return {
         ...event,
         start,

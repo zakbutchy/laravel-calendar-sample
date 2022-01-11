@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-sheet height="6vh" class="d-flex align-center">
+        <v-sheet height="6vh" class="d-flex align-center" color="grey lighten-3">
             <v-btn icon @click="$refs.calendar.prev()">
                 <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
@@ -10,22 +10,34 @@
             </v-btn>
             <v-btn outlined small class="ma-4" @click="setToday">TODAY</v-btn>
         </v-sheet>
-        <CalendarList />
-        <v-sheet height="94vh">
-            <v-calendar
-                ref="calendar"
-                v-model="value"
-                :events="events"
-                @change="fetchEvents"
-                locale="ja-jp"
-                :day-format="(timestamp) => new Date(timestamp.date).getDate()"
-                :month-format="(timestamp) => (new Date(timestamp.date).getMonth() + 1)"
-                @click:event="showEvent"
-            ></v-calendar>
+        <v-sheet height="94vh" class="d-flex">
+            <v-sheet width="200px">
+                <CalendarList />
+            </v-sheet>
+            <v-sheet class="flex">
+                <v-calendar
+                    ref="calendar"
+                    v-model="value"
+                    :events="events"
+                    @change="fetchEvents"
+                    locale="ja-jp"
+                    :day-format="timestamp => new Date(timestamp.date).getDate()"
+                    :month-format="timestamp => new Date(timestamp.date).getMonth() + 1 + ' /'"
+                    @click:event="showEvent"
+                    @click:day="initEvent"
+                    @click:date="showDayEvents"
+                    @click:more="showDayEvents"
+                ></v-calendar>
+            </v-sheet>
         </v-sheet>
 
         <v-dialog :value="event !== null" @click:outside="closeDialog" width="600">
-            <EventDetailDialog v-if="event !== null" />
+            <EventDetailDialog v-if="event !== null && !isEditMode" />
+            <EventFormDialog v-if="event !== null && isEditMode" />
+        </v-dialog>
+
+        <v-dialog :value="clickedDate !== null" @click:outside="closeDialog" width="600">
+            <DayEventList />
         </v-dialog>
     </div>
 </template>
@@ -35,7 +47,8 @@ import { format } from 'date-fns';
 import { mapGetters, mapActions } from 'vuex';
 import EventDetailDialog from '../events/EventDetailDialog';
 import EventFormDialog from "../events/EventFormDialog";
-import CalendarList from "../calendars/CalendarList";
+import CalendarList from '../calendars/CalendarList';
+import DayEventList from '../pageParts/DayEventList';
 
 export default {
     name: 'Calendar',
@@ -44,24 +57,45 @@ export default {
     }),
     components: {
         EventDetailDialog,
-        CalendarList
+        EventFormDialog,
+        CalendarList,
+        DayEventList,
     },
     computed: {
-        ...mapGetters('events', ['events', 'event']), // storeのイベントgetterを使用する
+        ...mapGetters('events', ['events', 'event', 'isEditMode', 'clickedDate']),
         title () {
             return format(new Date(this.value), 'yyyy年 M月');
         },
     },
     methods: {
-        ...mapActions('events', ['fetchEvents', 'setEvent']), // storeのsetEventを利用するため追加
+        ...mapActions('events', ['fetchEvents', 'setEvent', 'setEditMode', 'setClickedDate']), // storeのsetEventを利用するため追加
         setToday() {
             this.value = format(new Date(), 'yyyy/MM/dd')
         },
-        showEvent({ event }) { // storeへクリックされたイベントを渡しstoreにセット
+        // storeへクリックされたイベントを渡しstoreにセット
+        showEvent({ nativeEvent, event }) {
             this.setEvent(event);
+            nativeEvent.stopPropagation();
         },
-        closeDialog() { // ダイアログを閉じる。storeのイベントへnullを渡す
+        // ダイアログを閉じる。storeのイベントへnullを渡す
+        closeDialog() {
             this.setEvent(null);
+            this.setEditMode(false);
+            this.setClickedDate(null);
+        },
+        initEvent({ date }) {
+            if (this.clickedDate !== null) {
+                return;
+            }
+            date = date.replace(/-/g, '/');
+            const start = format(new Date(date), 'yyyy/MM/dd 00:00:00')
+            const end = format(new Date(date), 'yyyy/MM/dd 01:00:00')
+            this.setEvent({ name: '', start, end, timed: true });
+            this.setEditMode(true);
+        },
+        showDayEvents({ date }) {
+            date = date.replace(/-/g, '/');
+            this.setClickedDate(date);
         },
     }
 };
