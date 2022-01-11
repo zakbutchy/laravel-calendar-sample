@@ -33,10 +33,17 @@ class CalendarController extends Controller
         return $this->_saveCalendar($request, $calendar);
     }
 
-    // 削除
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Request $request)
     {
         $calendar = Calendar::find($request->id);
+        // カレンダータイプに紐づくイベントを削除
+        $calendar->events()->each(function ($event) {
+            $event->delete();
+        });
 
         if ($calendar->delete()) {
             return response()->json($calendar);
