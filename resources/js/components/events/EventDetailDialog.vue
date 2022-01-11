@@ -55,18 +55,14 @@ export default {
         removeEvent() {
             this.$swal({
                 title: "Caution!",
-                html: `「${this.event.name}」を削除してもよろしいですか？`,
+                html: `「${this.event.name}」の予定を削除してもよろしいですか？`,
                 type: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Delete'
+                confirmButtonText: '削除',
+                cancelButtonText: 'キャンセル'
             }).then(result => {
                 if (result.value) {
                     this.deleteEvent(this.event.id);
-                    this.$swal(
-                        'OK!',
-                        'イベントを削除しました。',
-                        'success'
-                    )
                 }
             });
         },

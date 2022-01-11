@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-sheet height="6vh" class="d-flex align-center" color="grey lighten-3">
+        <v-sheet height="6vh" class="d-flex align-center">
+            <v-btn outlined small class="ma-4" @click="setToday">今日</v-btn>
             <v-btn icon @click="$refs.calendar.prev()">
                 <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
@@ -8,7 +9,6 @@
             <v-btn icon @click="$refs.calendar.next()">
                 <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
-            <v-btn outlined small class="ma-4" @click="setToday">TODAY</v-btn>
             <v-spacer></v-spacer>
             <v-sheet class="d-flex">
                 <v-select
@@ -149,3 +149,10 @@ export default {
     }
 };
 </script>
+<style lang="scss" scoped>
+::v-deep .v-select__selections {
+    input {
+        width: 1em;
+    }
+}
+</style>

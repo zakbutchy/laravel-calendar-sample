@@ -32,7 +32,7 @@
         </v-card-text>
         <v-card-actions class="d-flex justify-end">
             <v-btn @click="cancel">キャンセル</v-btn>
-            <v-btn @click="submit">保存</v-btn>
+            <v-btn @click="submit" color="primary">保存</v-btn>
         </v-card-actions>
     </v-card>
 </template>

@@ -11,7 +11,7 @@
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
-                        <div class="row mb-3">
+                        <div class="row mb-3 align-items-center">
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">
@@ -25,7 +25,7 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
+                        <div class="row mb-3 align-items-center">
                             <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
@@ -39,9 +39,9 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
+                        <div class="row mb-3 align-items-center">
                             <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
+                                <div class="form-check col-4">
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="form-check-label" for="remember">
@@ -52,7 +52,7 @@
                         </div>
 
                         <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
+                            <div class="col-md-8 offset-md-4 d-flex">
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>

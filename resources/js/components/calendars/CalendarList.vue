@@ -75,10 +75,18 @@ export default {
             this.setCalendar(calendar);
         },
         delCalendar(calendar) {
-            const res = confirm(`「${calendar.name}」を削除してもよろしいですか？`);
-            if(res) {
-                this.deleteCalendar(calendar.id);
-            }
+            this.$swal({
+                title: "Caution!",
+                html: `カレンダー「${calendar.name}」を削除してもよろしいですか？`,
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '削除',
+                cancelButtonText: 'キャンセル'
+            }).then(result => {
+                if (result.value) {
+                    this.deleteCalendar(calendar.id);
+                }
+            });
         },
         toggleVisibility(calendar) {
             this.updateCalendar(calendar);
