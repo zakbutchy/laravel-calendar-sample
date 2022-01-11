@@ -15,10 +15,11 @@
                     @endif
 
                     {{ __('You are logged in!') }}
+                    <input type="hidden" id="user_id" name="user_id" value="{{ Auth::id() }}" />
+                    <div id="app">
+                        <home-component></home-component>
+                    </div>
                 </div>
-            </div>
-            <div id="app">
-                <home-component></home-component>
             </div>
         </div>
     </div>
