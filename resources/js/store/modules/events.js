@@ -12,7 +12,7 @@ const state = {
 
 // stateを取得する（getterを使わないrenderもある）
 const getters = {
-    events: state => state.events.map(event => serializeEvent(event)),
+    events: state => state.events.filter(event => event.calendar.visibility).map(event => serializeEvent(event)),
     event: state => serializeEvent(state.event),
 
     // クリックした日付の予定を取得する
