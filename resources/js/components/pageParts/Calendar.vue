@@ -9,6 +9,22 @@
                 <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
             <v-btn outlined small class="ma-4" @click="setToday">TODAY</v-btn>
+            <v-spacer></v-spacer>
+            <v-sheet class="d-flex">
+                <v-select
+                    dense
+                    v-model="viewSelect"
+                    :items="items"
+                    item-text="text"
+                    item-value="value"
+                    label="Select"
+                    persistent-hint
+                    return-object
+                    single-line
+                    prepend-icon="mdi-calendar"
+                    @change="changeView(viewSelect.value, $event)"
+                ></v-select>
+            </v-sheet>
         </v-sheet>
         <v-sheet height="94vh" class="d-flex">
             <v-sheet width="200px">
@@ -17,6 +33,7 @@
             <v-sheet class="flex">
                 <v-calendar
                     ref="calendar"
+                    :type="type || 'month'"
                     v-model="value"
                     :events="events"
                     @change="fetchEvents"
@@ -54,6 +71,13 @@ export default {
     name: 'Calendar',
     data: () => ({
         value: format(new Date(), 'yyyy/MM/dd'), // 初期値を今日の月にする
+        type: 'month',
+        viewSelect: { value: 'month', text: '月' },
+        items: [
+            { value: 'month', text: '月' },
+            { value: 'week', text: '週' },
+            { value: 'day', text: '日' },
+        ],
     }),
     components: {
         EventDetailDialog,
@@ -64,7 +88,14 @@ export default {
     computed: {
         ...mapGetters('events', ['events', 'event', 'isEditMode', 'clickedDate']),
         title () {
-            return format(new Date(this.value), 'yyyy年 M月');
+            switch (this.type) {
+                case "month":
+                    return format(new Date(this.value), "yyyy年 M月");
+                case "week":
+                    return this.formedDateOfThisWeek(new Date(this.value));
+                case "day":
+                    return format(new Date(this.value), "yyyy年 M月 d日");
+            }
         },
     },
     methods: {
@@ -96,6 +127,24 @@ export default {
         showDayEvents({ date }) {
             date = date.replace(/-/g, '/');
             this.setClickedDate(date);
+        },
+        changeView (text, event) {
+            this.type = event.value;
+        },
+        formedDateOfThisWeek(today) {
+            const this_year = today.getFullYear();
+            const this_month = today.getMonth();
+            const date = today.getDate();
+            const day_num = today.getDay();
+            const this_sunday = date - day_num;
+            const this_saturday = this_sunday + 6;
+            const day = String("日月火水木金土");
+            let start_date = new Date(this_year, this_month, this_sunday);
+            start_date = start_date.getFullYear() + "年" + (start_date.getMonth() + 1) + "月" + start_date.getDate() + "日" + " (" + day.charAt(start_date.getDay()) + ")";
+            let end_date = new Date(this_year, this_month, this_saturday);
+            end_date = end_date.getFullYear() + "年" + (end_date.getMonth() + 1) + "月" + end_date.getDate() + "日" + " (" + day.charAt(end_date.getDay()) + ")";
+
+            return start_date + " ～ " + end_date;
         },
     }
 };
