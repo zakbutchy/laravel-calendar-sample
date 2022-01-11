@@ -15,14 +15,15 @@ class CreateEventsTable extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->dateTime('start');
-            $table->dateTime('end');
-            $table->boolean('timed')->nullable()->default(false);
-            $table->text('description')->nullable();
-            $table->string('color')->nullable();
+            $table->string('name', 100)->comment('イベント名');
+            $table->dateTime('start')->comment('開始日時');
+            $table->dateTime('end')->comment('終了日時');
+            $table->boolean('timed')->nullable()->default(false)->comment('終日');
+            $table->text('description')->nullable()->comment('イベント詳細');
+            $table->string('color')->nullable()->comment('イベントカラー');
             $table->foreignId('calendar_id')->constrained();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

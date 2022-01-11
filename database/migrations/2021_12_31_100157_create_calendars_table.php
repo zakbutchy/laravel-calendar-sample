@@ -15,11 +15,12 @@ class CreateCalendarsTable extends Migration
     {
         Schema::create('calendars', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->string('color')->nullable();
-            $table->boolean('visibility')->default(true);
+            $table->string('name', 100)->comment('カレンダー名');
+            $table->string('color')->nullable()->comment('カレンダーカラー');
+            $table->boolean('visibility')->default(true)->comment('表示/非表示');
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
