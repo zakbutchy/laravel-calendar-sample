@@ -23,6 +23,9 @@
             <DialogSection icon="mdi-card-text-outline">
                 <TextForm v-model="description" />
             </DialogSection>
+            <DialogSection icon="mdi-calendar">
+                <CalendarSelectForm :value="calendar" @input="changeCalendar($event)" />
+            </DialogSection>
             <DialogSection icon="mdi-palette">
                 <ColorForm v-model="color" />
             </DialogSection>
@@ -42,6 +45,7 @@ import TimeForm from '../form/TimeForm';
 import TextForm from '../form/TextForm';
 import ColorForm from '../form/ColorForm';
 import CheckBox from '../form/CheckBox';
+import CalendarSelectForm from '../form/CalendarSelectForm';
 
 export default {
     name: 'EventFormDialog',
@@ -52,6 +56,7 @@ export default {
         TextForm,
         ColorForm,
         CheckBox,
+        CalendarSelectForm,
     },
     data: () => ({
         name: '',
@@ -62,6 +67,7 @@ export default {
         description: '',
         color: '',
         allDay: false,
+        calendar: null,
     }),
     computed: {
         ...mapGetters('events', ['event']),
@@ -75,6 +81,7 @@ export default {
         this.description = this.event.description;
         this.color = this.event.color;
         this.allDay = !this.event.timed;
+        this.calendar = this.event.calendar;
     },
     methods: {
         ...mapActions('events', ['setEvent', 'setEditMode', 'createEvent', 'updateEvent']),
@@ -91,6 +98,7 @@ export default {
                 description: this.description,
                 color: this.color,
                 timed: !this.allDay,
+                calendar_id: this.calendar.id,
             };
             if (params.id) {
                 this.updateEvent(params);
@@ -104,6 +112,10 @@ export default {
             if (!this.event.id) {
                 this.setEvent(null);
             }
+        },
+        changeCalendar(calendar) {
+            this.color = calendar.color;
+            this.calendar = calendar;
         },
     },
 };

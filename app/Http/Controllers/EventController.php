@@ -8,14 +8,21 @@ use Carbon\Carbon;
 
 class EventController extends Controller
 {
-    public function index()
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(): \Illuminate\Http\JsonResponse
     {
-        return response()->json(Event::all());
+        return response()->json(Event::with('calendar')->get());
     }
 
-    public function show(int $id)
+    /**
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(int $id): \Illuminate\Http\JsonResponse
     {
-        return response()->json(Event::find($id));
+        return response()->json(Event::with('calendar')->find($id));
     }
 
     public function create(Request $request)
@@ -62,7 +69,7 @@ class EventController extends Controller
         $event->color = $request->input('color');
 
         if ($event->save()) {
-            return response()->json($event);
+            return response()->json(Event::with('calendar')->find($event->id));
         } else {
             return response()->json(['error' => 'Save Error']);
         }
