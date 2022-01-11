@@ -41,4 +41,43 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * デフォルトの予定を登録
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            $user->calendars()->createMany([
+                [
+                    'name' => '仕事',
+                    'color' => 'blue',
+                    'visibility' => 1,
+                    'user_id' => $user->id,
+                ],
+                [
+                    'name' => 'プライベート',
+                    'color' => 'green',
+                    'visibility' => 1,
+                    'user_id' => $user->id,
+                ],
+                [
+                    'name' => 'その他',
+                    'color' => 'red',
+                    'visibility' => 1,
+                    'user_id' => $user->id,
+                ],
+            ]);
+        });
+    }
+
+    /**
+     * カレンダーとのリレーション
+     */
+    public function calendars()
+    {
+        return $this->hasMany(Calendar::class);
+    }
 }
