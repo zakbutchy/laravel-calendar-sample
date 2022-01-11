@@ -42,7 +42,7 @@ const mutations = {
 const actions = {
     // イベント取得
     async fetchEvents({ commit }) {
-        const response = await axios.get('/api/events');
+        const response = await axios.get('/events');
         commit('setEvents', response.data);
     },
     // イベント作成

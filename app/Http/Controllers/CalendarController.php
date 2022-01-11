@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Calendar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CalendarController extends Controller
 {
     public function index()
     {
-        Calendar::all();
+        return response()->json(Calendar::query()->where('user_id', '=', Auth::id())->get());
     }
 
     public function show(int $id)

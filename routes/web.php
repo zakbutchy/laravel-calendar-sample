@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\EventController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,3 +23,5 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/calendars', [CalendarController::class, 'index'])->name('calendars.index');
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
