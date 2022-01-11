@@ -10,6 +10,7 @@
             </v-btn>
             <v-btn outlined small class="ma-4" @click="setToday">TODAY</v-btn>
         </v-sheet>
+        <CalendarList />
         <v-sheet height="94vh">
             <v-calendar
                 ref="calendar"
@@ -34,6 +35,7 @@ import { format } from 'date-fns';
 import { mapGetters, mapActions } from 'vuex';
 import EventDetailDialog from '../events/EventDetailDialog';
 import EventFormDialog from "../events/EventFormDialog";
+import CalendarList from "../calendars/CalendarList";
 
 export default {
     name: 'Calendar',
@@ -42,6 +44,7 @@ export default {
     }),
     components: {
         EventDetailDialog,
+        CalendarList
     },
     computed: {
         ...mapGetters('events', ['events', 'event']), // storeのイベントgetterを使用する

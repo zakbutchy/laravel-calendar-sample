@@ -20,3 +20,14 @@ export const serializeEvent = event => {
         color: event.color || '#216a1a',
     };
 };
+
+// カレンダー用の関数を追加
+export const serializeCalendar = calendar => {
+    if (calendar === null) {
+        return null;
+    }
+    return {
+        ...calendar,
+        color: calendar.color || '#216a1a',
+    };
+};
